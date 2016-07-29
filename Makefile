@@ -48,47 +48,50 @@ BIN=$(CP) -O ihex
 #
 # HSE_VALUE sets the value of the HSE clock, 8MHz in this case 
 
-DEFS = -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD_VL -DHSE_VALUE=8000000
-STARTUP = ../../Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/startup/gcc_ride7/startup_stm32f10x_md_vl.s
+LIB_PATH=../../STM32F0xx_StdPeriph_Lib_V1.5.0
 
-MCU = cortex-m3
+DEFS = -DUSE_STDPERIPH_DRIVER
+STARTUP = $(LIB_PATH)/Libraries/CMSIS/Device/ST/STM32F0xx/Source/Templates/gcc_ride7/startup_stm32f051.s
+
+MCU = cortex-m0
 MCFLAGS = -mcpu=$(MCU) -mthumb -mlittle-endian -mthumb-interwork
 
-STM32_INCLUDES = -I../../Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/ \
-	-I../../Libraries/CMSIS/CM3/CoreSupport/ \
-	-I../../Libraries/STM32F10x_StdPeriph_Driver/inc/
+STM32_INCLUDES = -I$(LIB_PATH)/Libraries/CMSIS/Device/ST/STM32F0xx/Include \
+	-I$(LIB_PATH)/Libraries/CMSIS/Include \
+	-I$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/inc/
 
-OPTIMIZE       = -O3
+OPTIMIZE = -Os
 
-CFLAGS	= $(MCFLAGS)  $(OPTIMIZE)  $(DEFS) -I. -I./ $(STM32_INCLUDES)  -Wl,-T,stm32_flash.ld
+CFLAGS	= $(MCFLAGS)  $(OPTIMIZE)  $(DEFS) -I. -I./ $(STM32_INCLUDES)  -Wl,-T,stm32f051_flash.ld
 AFLAGS	= $(MCFLAGS) 
 
 SRC = main.c \
-	stm32f10x_it.c \
-	system_stm32f10x.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/misc.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_adc.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_bkp.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_can.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_cec.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dac.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dbgmcu.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_exti.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_fsmc.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_i2c.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_iwdg.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_pwr.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rtc.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_sdio.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_spi.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_tim.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.c \
-	../../Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_wwdg.c
+	stm32f0xx_it.c \
+	system_stm32f0xx.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_adc.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_dac.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_i2c.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_spi.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_can.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_dbgmcu.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_iwdg.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_syscfg.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_cec.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_dma.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_misc.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_tim.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_comp.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_exti.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_pwr.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_usart.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_crc.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_flash.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_rcc.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_wwdg.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_crs.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_gpio.c \
+	$(LIB_PATH)/Libraries/STM32F0xx_StdPeriph_Driver/src/stm32f0xx_rtc.c
+
 
 OBJDIR = .
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o) 
